@@ -1,0 +1,40 @@
+# GovernanceHub
+
+## Overview
+
+GovernanceHub is a multi-tenant incident and operational risk management SaaS application.
+
+## Tech Stack
+
+- React + TypeScript frontend
+- Express + TypeScript backend
+- PostgreSQL database
+- Docker Compose for local development
+
+## Core Rules
+
+- All tenant-owned tables must include tenant_id
+- Never trust tenant_id from frontend input
+- Backend derives tenant_id from authenticated JWT
+- Use PostgreSQL parameterized queries
+- Use TypeScript throughout
+- Use async/await
+- Keep code simple and readable
+
+## AI Workflow
+
+Claude Code should operate in plan-first mode.
+
+Before major implementation:
+1. Explain plan
+2. Identify affected files
+3. Identify security concerns
+4. Then implement
+
+All AI-generated code must be reviewed carefully.
+
+Watch especially for:
+- tenant isolation bugs
+- missing validation
+- inconsistent error handling
+- unsafe SQL
