@@ -1,15 +1,13 @@
 import { Router } from "express";
-import { pool } from "../db";
+import { listIncidents } from "../services/incidentsService";
 
 const router = Router();
 
 router.get("/", async (_req, res) => {
   try {
-    const result = await pool.query(
-      `SELECT * FROM incidents ORDER BY created_at DESC`
-    );
+    const incidents = await listIncidents();
 
-    res.json({ incidents: result.rows });
+    res.json({ incidents });
   } catch (error) {
     console.error("Failed to fetch incidents:", error);
     res.status(500).json({
