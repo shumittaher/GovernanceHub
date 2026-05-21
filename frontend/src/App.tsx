@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { login } from './api'
+import { useEffect, useState } from 'react'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import type { User } from './api'
+import Login from './pages/Login'
+import Incidents from './pages/Incidents'
+
 function App() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
@@ -13,91 +12,44 @@ function App() {
     if (raw) {
       try {
         setUser(JSON.parse(raw))
-      } catch (e) {
-        // ignore
+      } catch {
+        setUser(null)
       }
     }
   }, [])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
-    try {
-      const u = await login(email, password)
-      setLoading(false)
-      setUser(u || null)
-      // Login successful — token and user are stored in localStorage.
-    } catch (err: any) {
-      setLoading(false)
-      setError(err?.message || 'Login failed')
-    }
-  }
 
   const handleLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     setUser(null)
+    window.location.href = '/login'
   }
 
+  const isAuthenticated = Boolean(localStorage.getItem('token'))
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md p-8 bg-white rounded shadow">
-        {user && (
-          <div className="mb-4 flex items-center justify-between text-sm text-gray-700">
-            <div>
-              Signed in as <strong>{(user as any).name || (user as any).email || JSON.stringify(user)}</strong>
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto p-4">
+          {user && (
+            <div className="mb-4 flex items-center justify-between text-sm text-gray-700">
+              <div>
+                Signed in as <strong>{(user as any).name || (user as any).email}</strong>
+              </div>
+              <button onClick={handleLogout} className="text-indigo-600 hover:underline">
+                Sign out
+              </button>
             </div>
-            <button onClick={handleLogout} className="text-indigo-600 hover:underline">
-              Sign out
-            </button>
-          </div>
-        )}
-        <h1 className="text-2xl font-semibold mb-6 text-center">
-          Sign in to GovernanceHub
-        </h1>
+          )}
 
-        {error && (
-          <div className="mb-4 text-sm text-red-700 bg-red-100 p-2 rounded">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 border rounded"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-3 py-2 border rounded"
-            />
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-2 px-4 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50"
-            >
-              {loading ? 'Signing in...' : 'Sign in'}
-            </button>
-          </div>
-        </form>
+          <Routes>
+            <Route path="/" element={<Navigate to={isAuthenticated ? '/incidents' : '/login'} replace />} />
+            <Route path="/login" element={isAuthenticated ? <Navigate to="/incidents" replace /> : <Login onLogin={setUser} />} />
+            <Route path="/incidents" element={isAuthenticated ? <Incidents /> : <Navigate to="/login" replace />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </BrowserRouter>
   )
 }
 
