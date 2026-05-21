@@ -35,6 +35,8 @@ GovernanceHub is a multi-tenant incident and operational risk management SaaS ap
 - API request helpers go in `src/api`
 - Route/page components go in `src/pages`
 - Keep `App.tsx` and `main.tsx` in `src/`
+- Frontend API helpers must match the exact backend JSON response shape.
+- Before implementing frontend fetch logic, inspect the actual backend response structure.
 
 ## AI Workflow
 
