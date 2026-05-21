@@ -3,16 +3,19 @@ import {
   insertIncident,
 } from "../dao/incidentsDao";
 
-export async function listIncidents() {
-  return fetchIncidents();
+export async function listIncidents(tenantId: number) {
+  return fetchIncidents(tenantId);
 }
 
-export async function createIncident(data: {
-  title: string;
-  description?: string;
-  severity: "Low" | "Medium" | "High" | "Critical";
-  status: "Open" | "In Progress" | "Resolved" | "Closed";
-  assigned_to?: string;
-}) {
-  return insertIncident(data);
+export async function createIncident(
+  tenantId: number,
+  data: {
+    title: string;
+    description?: string;
+    severity: "Low" | "Medium" | "High" | "Critical";
+    status: "Open" | "In Progress" | "Resolved" | "Closed";
+    assigned_to?: string;
+  }
+) {
+  return insertIncident(tenantId, data);
 }

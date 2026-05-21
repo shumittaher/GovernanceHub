@@ -1,11 +1,14 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { z } from "zod";
+import { authMiddleware } from "../middleware/auth";
 import {
   createIncident,
   listIncidents,
 } from "../services/incidentsService";
 
 const router = Router();
+
+router.use(authMiddleware);
 
 const createIncidentSchema = z.object({
   title: z.string().nonempty(),
@@ -15,9 +18,10 @@ const createIncidentSchema = z.object({
   assigned_to: z.string().optional(),
 });
 
-router.get("/", async (_req, res) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
-    const incidents = await listIncidents();
+    const tenantId = req.user!.tenantId;
+    const incidents = await listIncidents(tenantId);
 
     res.json({ incidents });
   } catch (error) {
@@ -29,8 +33,9 @@ router.get("/", async (_req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req: Request, res: Response) => {
   try {
+    const tenantId = req.user!.tenantId;
     const incidentData = createIncidentSchema.safeParse(req.body);
 
     if (!incidentData.success) {
@@ -41,7 +46,7 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const incident = await createIncident(incidentData.data);
+    const incident = await createIncident(tenantId, incidentData.data);
 
     res.status(201).json({ incident });
   } catch (error) {
