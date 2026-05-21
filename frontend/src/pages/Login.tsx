@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login } from '../api'
-import type { User } from '../api'
+import { login } from '../api/authApi'
+import type { User } from '../api/authApi'
 
 interface LoginProps {
   onLogin: (user: User) => void

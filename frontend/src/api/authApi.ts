@@ -1,12 +1,8 @@
 export interface User {
-  [key: string]: any
-}
-
-export interface User {
-  id: number;
-  tenant_id: number;
-  name: string;
-  email: string;
+  id: number
+  tenant_id: number
+  name: string
+  email: string
 }
 
 export async function login(email: string, password: string): Promise<User> {
@@ -19,7 +15,7 @@ export async function login(email: string, password: string): Promise<User> {
   let data: any = null
   try {
     data = await res.json()
-  } catch (e) {
+  } catch {
     // non-JSON response
   }
 
@@ -38,5 +34,3 @@ export async function login(email: string, password: string): Promise<User> {
 
   return user
 }
-
-export default { login }

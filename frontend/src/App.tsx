@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import type { User } from './api'
+import type { User } from './api/authApi'
 import Login from './pages/Login'
 import Incidents from './pages/Incidents'
 
