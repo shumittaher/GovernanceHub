@@ -9,19 +9,19 @@ VALUES
     1,
     'Shumit',
     'shumit@scb.com',
-    'hashed_password_placeholder'
+    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG'
   ),
   (
     1,
     'Sarah',
     'sarah@scb.com',
-    'hashed_password_placeholder'
+    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG'
   ),
   (
     2,
     'Mike',
     'mike@kiwirail.co.nz',
-    'hashed_password_placeholder'
+    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG'
   );
 
 INSERT INTO incidents (
