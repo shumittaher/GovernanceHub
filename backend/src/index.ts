@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { pool } from "./db";
 import incidentsRouter from "./routes/incidents";
 import authRouter from "./routes/auth";
+import usersRouter from "./routes/users";
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.get("/health", async (_req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/incidents", incidentsRouter);
+app.use("/api/users", usersRouter);
 
 const PORT = process.env.PORT || 5000;
 
