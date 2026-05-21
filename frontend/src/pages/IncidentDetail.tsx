@@ -1,12 +1,21 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { fetchIncidentById, type Incident } from '../api/incidentsApi'
+import { fetchIncidentById, updateIncident, type Incident } from '../api/incidentsApi'
+
+const SEVERITY_OPTIONS = ['Low', 'Medium', 'High', 'Critical']
+const STATUS_OPTIONS = ['Open', 'In Progress', 'Resolved', 'Closed']
 
 function IncidentDetail() {
   const { id } = useParams()
   const [incident, setIncident] = useState<Incident | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  const [editing, setEditing] = useState(false)
+  const [form, setForm] = useState({ title: '', description: '', severity: '', status: '', assigned_to: '' })
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveSuccess, setSaveSuccess] = useState(false)
 
   useEffect(() => {
     const loadIncident = async () => {
@@ -36,6 +45,48 @@ function IncidentDetail() {
     loadIncident()
   }, [id])
 
+  function openEdit() {
+    if (!incident) return
+    setForm({
+      title: incident.title,
+      description: incident.description ?? '',
+      severity: incident.severity,
+      status: incident.status,
+      assigned_to: incident.assigned_to ?? '',
+    })
+    setSaveError(null)
+    setSaveSuccess(false)
+    setEditing(true)
+  }
+
+  function cancelEdit() {
+    setEditing(false)
+    setSaveError(null)
+  }
+
+  async function handleSave(e: { preventDefault: () => void }) {
+    e.preventDefault()
+    if (!incident) return
+    setSaving(true)
+    setSaveError(null)
+    try {
+      const updated = await updateIncident(incident.id, {
+        title: form.title,
+        description: form.description || undefined,
+        severity: form.severity,
+        status: form.status,
+        assigned_to: form.assigned_to || null,
+      })
+      setIncident(updated)
+      setEditing(false)
+      setSaveSuccess(true)
+    } catch (err: any) {
+      setSaveError(err?.message || 'Failed to save changes')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-3xl p-8 bg-white rounded shadow">
@@ -51,13 +102,25 @@ function IncidentDetail() {
           <div className="mt-4 text-sm text-red-700 bg-red-100 p-3 rounded">{error}</div>
         )}
 
-        {!loading && !error && incident && (
+        {!loading && !error && incident && !editing && (
           <div className="mt-6 space-y-6">
-            <div>
-              <h2 className="text-xl font-semibold">{incident.title}</h2>
-              <p className="mt-2 text-gray-600">
-                {incident.description || 'No description provided.'}
-              </p>
+            {saveSuccess && (
+              <div className="text-sm text-green-700 bg-green-100 p-3 rounded">Incident updated successfully.</div>
+            )}
+
+            <div className="flex items-start justify-between">
+              <div>
+                <h2 className="text-xl font-semibold">{incident.title}</h2>
+                <p className="mt-2 text-gray-600">
+                  {incident.description || 'No description provided.'}
+                </p>
+              </div>
+              <button
+                onClick={openEdit}
+                className="ml-4 shrink-0 text-sm text-indigo-600 hover:text-indigo-700 border border-indigo-300 rounded px-3 py-1"
+              >
+                Edit
+              </button>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -75,6 +138,91 @@ function IncidentDetail() {
               </div>
             </div>
           </div>
+        )}
+
+        {!loading && !error && incident && editing && (
+          <form onSubmit={handleSave} className="mt-6 space-y-4">
+            {saveError && (
+              <div className="text-sm text-red-700 bg-red-100 p-3 rounded">{saveError}</div>
+            )}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Title</label>
+              <input
+                type="text"
+                required
+                value={form.title}
+                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                className="mt-1 block w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Description</label>
+              <textarea
+                value={form.description}
+                onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                rows={3}
+                className="mt-1 block w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Severity</label>
+                <select
+                  value={form.severity}
+                  onChange={e => setForm(f => ({ ...f, severity: e.target.value }))}
+                  className="mt-1 block w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                >
+                  {SEVERITY_OPTIONS.map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Status</label>
+                <select
+                  value={form.status}
+                  onChange={e => setForm(f => ({ ...f, status: e.target.value }))}
+                  className="mt-1 block w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                >
+                  {STATUS_OPTIONS.map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Assigned To</label>
+              <input
+                type="text"
+                value={form.assigned_to}
+                onChange={e => setForm(f => ({ ...f, assigned_to: e.target.value }))}
+                className="mt-1 block w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                type="submit"
+                disabled={saving}
+                className="px-4 py-2 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50"
+              >
+                {saving ? 'Saving...' : 'Save'}
+              </button>
+              <button
+                type="button"
+                onClick={cancelEdit}
+                disabled={saving}
+                className="px-4 py-2 text-sm border rounded hover:bg-gray-50 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         )}
       </div>
     </div>
