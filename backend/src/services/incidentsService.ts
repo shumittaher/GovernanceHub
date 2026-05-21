@@ -3,6 +3,7 @@ import {
   fetchIncidents,
   insertIncident,
   updateIncident as daoUpdateIncident,
+  deleteIncident as daoDeleteIncident,
 } from "../dao/incidentsDao";
 
 export async function listIncidents(tenantId: number) {
@@ -24,6 +25,10 @@ export async function createIncident(
   }
 ) {
   return insertIncident(tenantId, data);
+}
+
+export async function deleteIncident(tenantId: number, incidentId: number): Promise<boolean> {
+  return daoDeleteIncident(tenantId, incidentId);
 }
 
 export async function updateIncident(

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { authMiddleware } from "../middleware/auth";
 import {
   createIncident,
+  deleteIncident,
   getIncidentById,
   listIncidents,
   updateIncident,
@@ -141,6 +142,36 @@ router.put("/:id", async (req: Request, res: Response) => {
     res.status(500).json({
       status: "error",
       message: "Unable to update incident",
+    });
+  }
+});
+
+router.delete("/:id", async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid incident id",
+      });
+    }
+
+    const tenantId = req.user!.tenantId;
+    const deleted = await deleteIncident(tenantId, id);
+
+    if (!deleted) {
+      return res.status(404).json({
+        status: "error",
+        message: "Incident not found",
+      });
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    console.error("Failed to delete incident:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Unable to delete incident",
     });
   }
 });

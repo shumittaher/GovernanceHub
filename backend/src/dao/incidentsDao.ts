@@ -86,3 +86,11 @@ export async function updateIncident(
 
   return result.rows[0] ?? null;
 }
+
+export async function deleteIncident(tenantId: number, incidentId: number): Promise<boolean> {
+  const result = await pool.query(
+    `DELETE FROM incidents WHERE id = $1 AND tenant_id = $2`,
+    [incidentId, tenantId]
+  );
+  return (result.rowCount ?? 0) > 0;
+}
