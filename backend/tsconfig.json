@@ -7,6 +7,8 @@
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "nodenext",
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "rootDir": "./src",
+    "outDir": "./dist"
   }
 }
