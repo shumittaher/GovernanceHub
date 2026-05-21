@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import type { User } from './api/authApi'
 import Login from './pages/Login'
 import Incidents from './pages/Incidents'
+import CreateUser from './pages/CreateUser'
 
 function App() {
   const [user, setUser] = useState<User | null>(null)
@@ -46,6 +47,7 @@ function App() {
             <Route path="/" element={<Navigate to={isAuthenticated ? '/incidents' : '/login'} replace />} />
             <Route path="/login" element={isAuthenticated ? <Navigate to="/incidents" replace /> : <Login onLogin={setUser} />} />
             <Route path="/incidents" element={isAuthenticated ? <Incidents /> : <Navigate to="/login" replace />} />
+            <Route path="/users/new" element={isAuthenticated ? <CreateUser /> : <Navigate to="/login" replace />} />
           </Routes>
         </div>
       </div>
