@@ -21,6 +21,18 @@ GovernanceHub is a multi-tenant incident and operational risk management SaaS ap
 - Use async/await
 - Keep code simple and readable
 
+## React + TypeScript Frontend Rules
+
+- Do not explicitly use `JSX.Element` return types for React function components.
+- Prefer inferred component return types:
+  - use `function Component() {`
+  - not `function Component(): JSX.Element {`
+- Use `import type` for type-only imports.
+- Keep all imports at the top of the file.
+- When adding routing, make `/login` the unauthenticated entry page.
+- Do not assume `user` exists unless it has been loaded from localStorage or state.
+- Protected pages must redirect to `/login` when no token exists.
+
 ## AI Workflow
 
 Claude Code should operate in plan-first mode.
