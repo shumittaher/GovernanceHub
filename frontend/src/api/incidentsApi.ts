@@ -1,3 +1,5 @@
+import { authenticatedFetch } from './httpClient'
+
 export interface Incident {
   id: number
   title: string
@@ -7,16 +9,8 @@ export interface Incident {
 }
 
 export async function fetchIncidents(): Promise<Incident[]> {
-  const token = localStorage.getItem('token')
-  if (!token) {
-    throw new Error('Missing auth token')
-  }
-
-  const res = await fetch('http://localhost:5000/api/incidents', {
+  const res = await authenticatedFetch('http://localhost:5000/api/incidents', {
     method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   })
 
   if (!res.ok) {
@@ -38,16 +32,10 @@ export interface NewIncident {
 }
 
 export async function createIncident(payload: NewIncident): Promise<Incident> {
-  const token = localStorage.getItem('token')
-  if (!token) {
-    throw new Error('Missing auth token')
-  }
-
-  const res = await fetch('http://localhost:5000/api/incidents', {
+  const res = await authenticatedFetch('http://localhost:5000/api/incidents', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
   })
