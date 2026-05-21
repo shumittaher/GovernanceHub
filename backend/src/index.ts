@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { pool } from "./db";
 import incidentsRouter from "./routes/incidents";
+import authRouter from "./routes/auth";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.get("/health", async (_req, res) => {
   }
 });
 
+app.use("/api/auth", authRouter);
 app.use("/api/incidents", incidentsRouter);
 
 const PORT = process.env.PORT || 5000;
