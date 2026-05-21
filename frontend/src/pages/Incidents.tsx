@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { fetchIncidents, createIncident, type Incident, type NewIncident } from '../api/incidentsApi'
 
 function Incidents() {
@@ -144,7 +145,11 @@ function Incidents() {
               <tbody>
                 {incidents.map((incident) => (
                   <tr key={incident.id} className="odd:bg-slate-50">
-                    <td className="border-b px-4 py-3">{incident.title}</td>
+                    <td className="border-b px-4 py-3">
+                      <Link to={`/incidents/${incident.id}`} className="text-indigo-600 hover:text-indigo-700">
+                        {incident.title}
+                      </Link>
+                    </td>
                     <td className="border-b px-4 py-3">{incident.severity}</td>
                     <td className="border-b px-4 py-3">{incident.status}</td>
                     <td className="border-b px-4 py-3">{incident.assigned_to}</td>

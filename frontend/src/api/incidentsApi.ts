@@ -3,9 +3,10 @@ import { authenticatedFetch } from './httpClient'
 export interface Incident {
   id: number
   title: string
+  description?: string
   severity: string
   status: string
-  assigned_to: string
+  assigned_to?: string | null
 }
 
 export async function fetchIncidents(): Promise<Incident[]> {
@@ -21,6 +22,20 @@ export async function fetchIncidents(): Promise<Incident[]> {
 
   const data = await res.json()
   return data.incidents as Incident[]
+}
+
+export async function fetchIncidentById(id: number): Promise<Incident> {
+  const res = await authenticatedFetch(`http://localhost:5000/api/incidents/${id}`, {
+    method: 'GET',
+  })
+
+  const data = await res.json().catch(() => null)
+  if (!res.ok) {
+    const message = data?.message || data?.error || 'Failed to load incident'
+    throw new Error(message)
+  }
+
+  return data.incident as Incident
 }
 
 export interface NewIncident {
