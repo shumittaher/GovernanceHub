@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { fetchIncidentById, updateIncident, type Incident } from '../api/incidentsApi'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { deleteIncident, fetchIncidentById, updateIncident, type Incident } from '../api/incidentsApi'
 
 const SEVERITY_OPTIONS = ['Low', 'Medium', 'High', 'Critical']
 const STATUS_OPTIONS = ['Open', 'In Progress', 'Resolved', 'Closed']
 
 function IncidentDetail() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [incident, setIncident] = useState<Incident | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -16,6 +17,8 @@ function IncidentDetail() {
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [saveSuccess, setSaveSuccess] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   useEffect(() => {
     const loadIncident = async () => {
@@ -44,6 +47,20 @@ function IncidentDetail() {
 
     loadIncident()
   }, [id])
+
+  async function handleDelete() {
+    if (!incident) return
+    if (!window.confirm('Delete this incident?')) return
+    setDeleting(true)
+    setDeleteError(null)
+    try {
+      await deleteIncident(incident.id)
+      navigate('/incidents')
+    } catch (err: any) {
+      setDeleteError(err?.message || 'Failed to delete incident')
+      setDeleting(false)
+    }
+  }
 
   function openEdit() {
     if (!incident) return
@@ -108,6 +125,10 @@ function IncidentDetail() {
               <div className="text-sm text-green-700 bg-green-100 p-3 rounded">Incident updated successfully.</div>
             )}
 
+            {deleteError && (
+              <div className="text-sm text-red-700 bg-red-100 p-3 rounded">{deleteError}</div>
+            )}
+
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="text-xl font-semibold">{incident.title}</h2>
@@ -115,12 +136,21 @@ function IncidentDetail() {
                   {incident.description || 'No description provided.'}
                 </p>
               </div>
-              <button
-                onClick={openEdit}
-                className="ml-4 shrink-0 text-sm text-indigo-600 hover:text-indigo-700 border border-indigo-300 rounded px-3 py-1"
-              >
-                Edit
-              </button>
+              <div className="ml-4 shrink-0 flex gap-2">
+                <button
+                  onClick={openEdit}
+                  className="text-sm text-indigo-600 hover:text-indigo-700 border border-indigo-300 rounded px-3 py-1"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="text-sm text-red-600 hover:text-red-700 border border-red-300 rounded px-3 py-1 disabled:opacity-50"
+                >
+                  {deleting ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">

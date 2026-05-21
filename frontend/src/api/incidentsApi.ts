@@ -73,6 +73,18 @@ export async function updateIncident(id: number, updates: IncidentUpdate): Promi
   return data.incident as Incident
 }
 
+export async function deleteIncident(id: number): Promise<void> {
+  const res = await authenticatedFetch(`http://localhost:5000/api/incidents/${id}`, {
+    method: 'DELETE',
+  })
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => null)
+    const message = data?.message || data?.error || 'Failed to delete incident'
+    throw new Error(message)
+  }
+}
+
 export async function createIncident(payload: NewIncident): Promise<Incident> {
   const res = await authenticatedFetch('http://localhost:5000/api/incidents', {
     method: 'POST',
