@@ -75,7 +75,7 @@ function IncidentDetail() {
         description: form.description || undefined,
         severity: form.severity,
         status: form.status,
-        assigned_to: form.assigned_to || null,
+        assigned_to: form.assigned_to === '' ? undefined : form.assigned_to,
       })
       setIncident(updated)
       setEditing(false)
