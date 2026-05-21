@@ -3,6 +3,7 @@ import { z } from "zod";
 import { authMiddleware } from "../middleware/auth";
 import {
   createIncident,
+  getIncidentById,
   listIncidents,
 } from "../services/incidentsService";
 
@@ -29,6 +30,36 @@ router.get("/", async (req: Request, res: Response) => {
     res.status(500).json({
       status: "error",
       message: "Unable to fetch incidents",
+    });
+  }
+});
+
+router.get("/:id", async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid incident id",
+      });
+    }
+
+    const tenantId = req.user!.tenantId;
+    const incident = await getIncidentById(tenantId, id);
+
+    if (!incident) {
+      return res.status(404).json({
+        status: "error",
+        message: "Incident not found",
+      });
+    }
+
+    res.json({ incident });
+  } catch (error) {
+    console.error("Failed to fetch incident:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Unable to fetch incident",
     });
   }
 });

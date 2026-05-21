@@ -8,6 +8,15 @@ export async function fetchIncidents(tenantId: number) {
   return result.rows;
 }
 
+export async function fetchIncidentById(tenantId: number, incidentId: number) {
+  const result = await pool.query(
+    `SELECT * FROM incidents WHERE id = $1 AND tenant_id = $2`,
+    [incidentId, tenantId]
+  );
+
+  return result.rows[0] ?? null;
+}
+
 export async function insertIncident(
   tenantId: number,
   data: {
