@@ -17,6 +17,9 @@ function App() {
         </div>
         <div>
           <h1>Get started</h1>
+          <h1 className="text-3xl font-bold text-center mt-10">
+            GovernanceHub
+          </h1>
           <p>
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
           </p>
