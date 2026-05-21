@@ -32,6 +32,9 @@ GovernanceHub is a multi-tenant incident and operational risk management SaaS ap
 - When adding routing, make `/login` the unauthenticated entry page.
 - Do not assume `user` exists unless it has been loaded from localStorage or state.
 - Protected pages must redirect to `/login` when no token exists.
+- API request helpers go in `src/api`
+- Route/page components go in `src/pages`
+- Keep `App.tsx` and `main.tsx` in `src/`
 
 ## AI Workflow
 
