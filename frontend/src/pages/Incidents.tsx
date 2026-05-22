@@ -13,6 +13,10 @@ function Incidents() {
   const [assignedTo, setAssignedTo] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
+  const [filterSeverity, setFilterSeverity] = useState('All')
+  const [filterStatus, setFilterStatus] = useState('All')
+  const [sortField, setSortField] = useState<string | null>(null)
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
 
   useEffect(() => {
     const loadIncidents = async () => {
@@ -68,6 +72,32 @@ function Incidents() {
   const open = incidents.filter(i => i.status === 'Open').length
   const critical = incidents.filter(i => i.severity === 'Critical').length
   const resolved = incidents.filter(i => i.status === 'Resolved').length
+
+  const filteredIncidents = incidents
+    .filter(i => filterSeverity === 'All' || i.severity === filterSeverity)
+    .filter(i => filterStatus === 'All' || i.status === filterStatus)
+
+  const sortedIncidents = sortField === null
+    ? filteredIncidents
+    : filteredIncidents.slice().sort((a, b) => {
+        const av = (a[sortField as keyof Incident] ?? '') as string
+        const bv = (b[sortField as keyof Incident] ?? '') as string
+        return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av)
+      })
+
+  function handleSort(field: string) {
+    if (sortField === field) {
+      setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortField(field)
+      setSortDir('asc')
+    }
+  }
+
+  function sortIndicator(field: string) {
+    if (sortField !== field) return ''
+    return sortDir === 'asc' ? ' ↑' : ' ↓'
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -158,31 +188,63 @@ function Incidents() {
         )}
 
         {!loading && !error && incidents.length > 0 && (
-          <div className="mt-6 overflow-x-auto">
-            <table className="min-w-full text-left border-collapse">
-              <thead>
-                <tr>
-                  <th className="border-b px-4 py-2">Title</th>
-                  <th className="border-b px-4 py-2">Severity</th>
-                  <th className="border-b px-4 py-2">Status</th>
-                  <th className="border-b px-4 py-2">Assigned To</th>
-                </tr>
-              </thead>
-              <tbody>
-                {incidents.map((incident) => (
-                  <tr key={incident.id} className="odd:bg-slate-50">
-                    <td className="border-b px-4 py-3">
-                      <Link to={`/incidents/${incident.id}`} className="text-indigo-600 hover:text-indigo-700">
-                        {incident.title}
-                      </Link>
-                    </td>
-                    <td className="border-b px-4 py-3">{incident.severity}</td>
-                    <td className="border-b px-4 py-3">{incident.status}</td>
-                    <td className="border-b px-4 py-3">{incident.assigned_to}</td>
-                  </tr>
+          <div className="mt-6">
+            <div className="flex flex-wrap gap-3 mb-4">
+              <select
+                value={filterSeverity}
+                onChange={e => setFilterSeverity(e.target.value)}
+                className="px-3 py-2 border rounded text-sm"
+              >
+                {['All', 'Low', 'Medium', 'High', 'Critical'].map(v => (
+                  <option key={v}>{v}</option>
                 ))}
-              </tbody>
-            </table>
+              </select>
+              <select
+                value={filterStatus}
+                onChange={e => setFilterStatus(e.target.value)}
+                className="px-3 py-2 border rounded text-sm"
+              >
+                {['All', 'Open', 'In Progress', 'Resolved', 'Closed'].map(v => (
+                  <option key={v}>{v}</option>
+                ))}
+              </select>
+            </div>
+
+            {sortedIncidents.length === 0 ? (
+              <p className="text-sm text-gray-600">No incidents match the current filters.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-left border-collapse">
+                  <thead>
+                    <tr>
+                      {(['title', 'severity', 'status', 'assigned_to'] as const).map((field, i) => (
+                        <th
+                          key={field}
+                          onClick={() => handleSort(field)}
+                          className="border-b px-4 py-2 cursor-pointer select-none hover:bg-slate-50"
+                        >
+                          {(['Title', 'Severity', 'Status', 'Assigned To'] as const)[i]}{sortIndicator(field)}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedIncidents.map((incident) => (
+                      <tr key={incident.id} className="odd:bg-slate-50">
+                        <td className="border-b px-4 py-3">
+                          <Link to={`/incidents/${incident.id}`} className="text-indigo-600 hover:text-indigo-700">
+                            {incident.title}
+                          </Link>
+                        </td>
+                        <td className="border-b px-4 py-3">{incident.severity}</td>
+                        <td className="border-b px-4 py-3">{incident.status}</td>
+                        <td className="border-b px-4 py-3">{incident.assigned_to}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
       </div>
