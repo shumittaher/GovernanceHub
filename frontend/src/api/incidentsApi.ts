@@ -1,4 +1,5 @@
 import { authenticatedFetch } from './httpClient'
+import { API_BASE_URL } from '../config'
 
 export interface Incident {
   id: number
@@ -12,7 +13,7 @@ export interface Incident {
 }
 
 export async function fetchIncidents(): Promise<Incident[]> {
-  const res = await authenticatedFetch('http://localhost:5000/api/incidents', {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/incidents`, {
     method: 'GET',
   })
 
@@ -27,7 +28,7 @@ export async function fetchIncidents(): Promise<Incident[]> {
 }
 
 export async function fetchIncidentById(id: number): Promise<Incident> {
-  const res = await authenticatedFetch(`http://localhost:5000/api/incidents/${id}`, {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/incidents/${id}`, {
     method: 'GET',
   })
 
@@ -57,7 +58,7 @@ export interface IncidentUpdate {
 }
 
 export async function updateIncident(id: number, updates: IncidentUpdate): Promise<Incident> {
-  const res = await authenticatedFetch(`http://localhost:5000/api/incidents/${id}`, {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/incidents/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -76,7 +77,7 @@ export async function updateIncident(id: number, updates: IncidentUpdate): Promi
 }
 
 export async function deleteIncident(id: number): Promise<void> {
-  const res = await authenticatedFetch(`http://localhost:5000/api/incidents/${id}`, {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/incidents/${id}`, {
     method: 'DELETE',
   })
 
@@ -88,7 +89,7 @@ export async function deleteIncident(id: number): Promise<void> {
 }
 
 export async function createIncident(payload: NewIncident): Promise<Incident> {
-  const res = await authenticatedFetch('http://localhost:5000/api/incidents', {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/incidents`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

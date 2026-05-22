@@ -1,4 +1,5 @@
 import { authenticatedFetch } from './httpClient'
+import { API_BASE_URL } from '../config'
 
 export interface User {
   id: number
@@ -12,7 +13,7 @@ export async function createUser(
   email: string,
   password: string
 ): Promise<User> {
-  const res = await authenticatedFetch('http://localhost:5000/api/users', {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/users`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

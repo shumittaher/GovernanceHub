@@ -1,4 +1,5 @@
 import { authenticatedFetch } from './httpClient'
+import { API_BASE_URL } from '../config'
 
 export interface AdminRecord {
   id: number
@@ -18,7 +19,7 @@ export interface NewAdmin {
 }
 
 export async function fetchAdmins(): Promise<AdminRecord[]> {
-  const res = await authenticatedFetch('http://localhost:5000/api/superadmin/admins', {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/superadmin/admins`, {
     method: 'GET',
   })
 
@@ -32,7 +33,7 @@ export async function fetchAdmins(): Promise<AdminRecord[]> {
 }
 
 export async function createAdmin(payload: NewAdmin): Promise<AdminRecord> {
-  const res = await authenticatedFetch('http://localhost:5000/api/superadmin/admins', {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/superadmin/admins`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -54,7 +55,7 @@ export interface TenantRecord {
 }
 
 export async function fetchTenants(): Promise<TenantRecord[]> {
-  const res = await authenticatedFetch('http://localhost:5000/api/superadmin/tenants', {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/superadmin/tenants`, {
     method: 'GET',
   })
 
@@ -68,7 +69,7 @@ export async function fetchTenants(): Promise<TenantRecord[]> {
 }
 
 export async function createTenant(name: string): Promise<TenantRecord> {
-  const res = await authenticatedFetch('http://localhost:5000/api/superadmin/tenants', {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/superadmin/tenants`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name }),
@@ -84,7 +85,7 @@ export async function createTenant(name: string): Promise<TenantRecord> {
 }
 
 export async function deleteTenant(id: number): Promise<void> {
-  const res = await authenticatedFetch(`http://localhost:5000/api/superadmin/tenants/${id}`, {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/superadmin/tenants/${id}`, {
     method: 'DELETE',
   })
 
@@ -96,7 +97,7 @@ export async function deleteTenant(id: number): Promise<void> {
 }
 
 export async function deleteAdmin(id: number): Promise<void> {
-  const res = await authenticatedFetch(`http://localhost:5000/api/superadmin/admins/${id}`, {
+  const res = await authenticatedFetch(`${API_BASE_URL}/api/superadmin/admins/${id}`, {
     method: 'DELETE',
   })
 
