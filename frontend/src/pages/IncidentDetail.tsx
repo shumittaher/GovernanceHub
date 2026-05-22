@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { deleteIncident, fetchIncidentById, updateIncident, type Incident } from '../api/incidentsApi'
+import { useAuth } from '../hooks/useAuth'
 
 const SEVERITY_OPTIONS = ['Low', 'Medium', 'High', 'Critical']
 const STATUS_OPTIONS = ['Open', 'In Progress', 'Resolved', 'Closed']
@@ -8,12 +9,7 @@ const STATUS_OPTIONS = ['Open', 'In Progress', 'Resolved', 'Closed']
 function IncidentDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const role = (() => {
-    try {
-      const raw = localStorage.getItem('user')
-      return raw ? (JSON.parse(raw).role as string) : null
-    } catch { return null }
-  })()
+  const { role } = useAuth()
   const [incident, setIncident] = useState<Incident | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
