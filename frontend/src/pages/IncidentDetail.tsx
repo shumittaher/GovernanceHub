@@ -8,6 +8,12 @@ const STATUS_OPTIONS = ['Open', 'In Progress', 'Resolved', 'Closed']
 function IncidentDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const role = (() => {
+    try {
+      const raw = localStorage.getItem('user')
+      return raw ? (JSON.parse(raw).role as string) : null
+    } catch { return null }
+  })()
   const [incident, setIncident] = useState<Incident | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -143,13 +149,15 @@ function IncidentDetail() {
                 >
                   Edit
                 </button>
-                <button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  className="text-sm text-red-600 hover:text-red-700 border border-red-300 rounded px-3 py-1 disabled:opacity-50"
-                >
-                  {deleting ? 'Deleting...' : 'Delete'}
-                </button>
+                {role === 'admin' && (
+                  <button
+                    onClick={handleDelete}
+                    disabled={deleting}
+                    className="text-sm text-red-600 hover:text-red-700 border border-red-300 rounded px-3 py-1 disabled:opacity-50"
+                  >
+                    {deleting ? 'Deleting...' : 'Delete'}
+                  </button>
+                )}
               </div>
             </div>
 
