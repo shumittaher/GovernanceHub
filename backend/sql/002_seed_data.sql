@@ -3,25 +3,41 @@ VALUES
   ('Standard Chartered Bank'),
   ('KiwiRail');
 
-INSERT INTO users (tenant_id, name, email, password_hash)
+INSERT INTO users (
+  tenant_id,
+  name,
+  email,
+  password_hash,
+  role
+)
 VALUES
   (
     1,
     'Shumit',
     'shumit@scb.com',
-    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG'
+    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG',
+    'superadmin'
   ),
   (
     1,
     'Sarah',
     'sarah@scb.com',
-    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG'
+    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG',
+    'admin'
   ),
   (
     2,
     'Mike',
     'mike@kiwirail.co.nz',
-    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG'
+    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG',
+    'admin'
+  ),
+  (
+    2,
+    'Emma',
+    'emma@kiwirail.co.nz',
+    '$2b$10$nq3qp0fAP5.qaJDESbEWG.BPVYArGFXrYEbk3ZOQRKnpF..DlSNLG',
+    'user'
   );
 
 INSERT INTO incidents (
