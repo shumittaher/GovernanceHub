@@ -5,6 +5,7 @@ import { pool } from "./db";
 import incidentsRouter from "./routes/incidents";
 import authRouter from "./routes/auth";
 import usersRouter from "./routes/users";
+import superadminRouter from "./routes/superadmin";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.get("/health", async (_req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/incidents", incidentsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/superadmin", superadminRouter);
 
 const PORT = process.env.PORT || 5000;
 
