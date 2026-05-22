@@ -107,8 +107,8 @@ function IncidentDetail() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-3xl p-8 bg-white rounded shadow">
+    <div className="min-h-screen flex justify-center bg-gray-50">
+      <div className="w-full h-full max-w-3xl p-8 bg-white rounded shadow">
         <Link to="/incidents" className="text-indigo-600 hover:text-indigo-700 text-sm">
           &larr; Back to incidents
         </Link>
@@ -134,7 +134,7 @@ function IncidentDetail() {
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="text-xl font-semibold">{incident.title}</h2>
-                <p className="mt-2 text-gray-600">
+                <p className="text-start mt-2 py-4 text-gray-600">
                   {incident.description || 'No description provided.'}
                 </p>
               </div>
@@ -196,7 +196,7 @@ function IncidentDetail() {
               <textarea
                 value={form.description}
                 onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                rows={3}
+                rows={5}
                 className="mt-1 block w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
               />
             </div>
