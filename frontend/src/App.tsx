@@ -6,6 +6,7 @@ import Incidents from './pages/Incidents'
 import IncidentDetail from './pages/IncidentDetail'
 import CreateUser from './pages/CreateUser'
 import SuperAdminAdmins from './pages/SuperAdminAdmins'
+import SuperAdminTenants from './pages/SuperAdminTenants'
 
 function App() {
   const [user, setUser] = useState<User | null>(() => {
@@ -37,6 +38,11 @@ function App() {
                   {role === 'superadmin' && (
                     <Link to="/superadmin/admins" className="text-indigo-600 hover:text-indigo-700">
                       Manage Admins
+                    </Link>
+                  )}
+                  {role === 'superadmin' && (
+                    <Link to="/superadmin/tenants" className="text-indigo-600 hover:text-indigo-700">
+                      Manage Tenants
                     </Link>
                   )}
                   {role !== 'superadmin' && (
@@ -83,6 +89,11 @@ function App() {
               !isAuthenticated ? <Navigate to="/login" replace />
               : role !== 'superadmin' ? <Navigate to="/incidents" replace />
               : <SuperAdminAdmins />
+            } />
+            <Route path="/superadmin/tenants" element={
+              !isAuthenticated ? <Navigate to="/login" replace />
+              : role !== 'superadmin' ? <Navigate to="/incidents" replace />
+              : <SuperAdminTenants />
             } />
           </Routes>
         </div>
