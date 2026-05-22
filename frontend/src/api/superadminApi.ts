@@ -47,6 +47,54 @@ export async function createAdmin(payload: NewAdmin): Promise<AdminRecord> {
   return data.admin as AdminRecord
 }
 
+export interface TenantRecord {
+  id: number
+  name: string
+  created_at: string
+}
+
+export async function fetchTenants(): Promise<TenantRecord[]> {
+  const res = await authenticatedFetch('http://localhost:5000/api/superadmin/tenants', {
+    method: 'GET',
+  })
+
+  const data = await res.json().catch(() => null)
+  if (!res.ok) {
+    const message = data?.message || data?.error || 'Failed to load tenants'
+    throw new Error(message)
+  }
+
+  return data.tenants as TenantRecord[]
+}
+
+export async function createTenant(name: string): Promise<TenantRecord> {
+  const res = await authenticatedFetch('http://localhost:5000/api/superadmin/tenants', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
+  })
+
+  const data = await res.json().catch(() => null)
+  if (!res.ok) {
+    const message = data?.message || data?.error || 'Failed to create tenant'
+    throw new Error(message)
+  }
+
+  return data.tenant as TenantRecord
+}
+
+export async function deleteTenant(id: number): Promise<void> {
+  const res = await authenticatedFetch(`http://localhost:5000/api/superadmin/tenants/${id}`, {
+    method: 'DELETE',
+  })
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => null)
+    const message = data?.message || data?.error || 'Failed to delete tenant'
+    throw new Error(message)
+  }
+}
+
 export async function deleteAdmin(id: number): Promise<void> {
   const res = await authenticatedFetch(`http://localhost:5000/api/superadmin/admins/${id}`, {
     method: 'DELETE',
