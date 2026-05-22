@@ -6,11 +6,12 @@ export interface UserRecord {
   name: string;
   email: string;
   password_hash: string;
+  role: string;
 }
 
 export async function findUserByEmail(email: string): Promise<UserRecord | null> {
   const result = await pool.query(
-    `SELECT id, tenant_id, name, email, password_hash FROM users WHERE email = $1 LIMIT 1`,
+    `SELECT id, tenant_id, name, email, password_hash, role FROM users WHERE email = $1 LIMIT 1`,
     [email]
   );
 

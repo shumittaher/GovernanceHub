@@ -24,6 +24,7 @@ export async function loginUser(email: string, password: string) {
       userId: user.id,
       tenantId: user.tenant_id,
       email: user.email,
+      role: user.role,
     },
     JWT_SECRET as string,
     {
@@ -38,6 +39,7 @@ export async function loginUser(email: string, password: string) {
       tenant_id: user.tenant_id,
       name: user.name,
       email: user.email,
+      role: user.role,
     },
   };
 }
