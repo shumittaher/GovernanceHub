@@ -31,8 +31,8 @@ function CreateUser() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md p-8 bg-white rounded shadow">
+    <div className="min-h-screen flex justify-center bg-gray-50">
+      <div className="w-full max-w-md p-8 bg-white rounded shadow h-full">
         <h1 className="text-2xl font-semibold mb-6 text-center">Create User</h1>
 
         {error && (

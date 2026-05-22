@@ -109,7 +109,7 @@ function Incidents() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex justify-center bg-gray-50">
       <div className="w-full max-w-4xl p-8 bg-white rounded shadow">
         <h1 className="text-2xl font-semibold">Incidents</h1>
 
