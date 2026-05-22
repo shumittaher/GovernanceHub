@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchAdmins, createAdmin, deleteAdmin, type AdminRecord } from '../api/superadminApi'
+import { fetchAdmins, createAdmin, deleteAdmin, fetchTenants, type AdminRecord, type TenantRecord } from '../api/superadminApi'
 
 const EMPTY_FORM = { name: '', email: '', password: '', tenant_id: '' }
 
@@ -14,6 +14,8 @@ function SuperAdminAdmins() {
 
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [tenants, setTenants] = useState<TenantRecord[]>([])
+  const [tenantsLoaded, setTenantsLoaded] = useState(false)
 
   async function loadAdmins() {
     setLoadError(null)
@@ -26,7 +28,12 @@ function SuperAdminAdmins() {
     }
   }
 
-  useEffect(() => { loadAdmins() }, [])
+  useEffect(() => {
+    loadAdmins()
+    fetchTenants()
+      .then(data => { setTenants(data); setTenantsLoaded(true) })
+      .catch(() => { setTenantsLoaded(true) })
+  }, [])
 
   async function handleCreate(e: { preventDefault: () => void }) {
     e.preventDefault()
@@ -61,6 +68,12 @@ function SuperAdminAdmins() {
       setDeletingId(null)
     }
   }
+
+  const tenantIdNum = Number(form.tenant_id)
+  const matchedTenant = form.tenant_id !== '' && Number.isInteger(tenantIdNum) && tenantIdNum > 0
+    ? tenants.find(t => t.id === tenantIdNum) ?? null
+    : null
+  const tenantInvalid = tenantsLoaded && form.tenant_id !== '' && matchedTenant === null
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -117,14 +130,23 @@ function SuperAdminAdmins() {
               min={1}
               value={form.tenant_id}
               onChange={e => setForm(f => ({ ...f, tenant_id: e.target.value }))}
-              className="mt-1 block w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className={`mt-1 block w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 ${tenantInvalid ? 'border-red-500 focus:ring-red-500' : 'focus:ring-indigo-500'}`}
             />
+            {!matchedTenant && !tenantInvalid && (
+              <p className="mt-1 text-xs text-gray-500">Please enter a valid tenant ID</p>
+            )}
+            {matchedTenant && (
+              <p className="mt-1 text-xs text-gray-500">{matchedTenant.name} | {tenantIdNum}</p>
+            )}
+            {tenantInvalid && (
+              <p className="mt-1 text-xs text-red-600">Tenant Invalid</p>
+            )}
           </div>
 
           <div className="sm:col-span-2">
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || tenantInvalid}
               className="px-4 py-2 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50"
             >
               {submitting ? 'Creating...' : 'Create Admin'}
