@@ -46,7 +46,7 @@ function App() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700">
-                  <span>Signed in as <strong>{(user as any).name || (user as any).email}</strong></span>
+                  <span>Signed in as <strong>{user.name || user.email}</strong>{user.role ? ` (${user.role})` : ''}</span>
                   <button onClick={handleLogout} className="text-indigo-600 hover:underline">
                     Sign out
                   </button>

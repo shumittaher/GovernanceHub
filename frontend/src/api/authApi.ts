@@ -3,6 +3,7 @@ export interface User {
   tenant_id: number
   name: string
   email: string
+  role: string
 }
 
 export async function login(email: string, password: string): Promise<User> {
