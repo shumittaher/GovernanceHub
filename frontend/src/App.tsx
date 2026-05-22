@@ -31,12 +31,12 @@ function App() {
                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700">
                   {role === 'superadmin' && (
                     <Link to="/superadmin/admins" className="text-indigo-600 hover:text-indigo-700">
-                      Manage Admins
+                      Admins
                     </Link>
                   )}
                   {role === 'superadmin' && (
                     <Link to="/superadmin/tenants" className="text-indigo-600 hover:text-indigo-700">
-                      Manage Tenants
+                      Tenants
                     </Link>
                   )}
                   {role !== 'superadmin' && (

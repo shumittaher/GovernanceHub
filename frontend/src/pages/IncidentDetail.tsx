@@ -129,16 +129,10 @@ function IncidentDetail() {
 
             {deleteError && (
               <div className="text-sm text-red-700 bg-red-100 p-3 rounded">{deleteError}</div>
-            )}
+            )}           
 
-            <div className="flex items-start justify-between">
-              <div>
-                <h2 className="text-xl font-semibold">{incident.title}</h2>
-                <p className="text-start mt-2 py-4 text-gray-600">
-                  {incident.description || 'No description provided.'}
-                </p>
-              </div>
-              <div className="ml-4 shrink-0 flex gap-2">
+            <div className="flex items-start justify-end">
+              <div className="ml-4 shrink-0 flex gap-2 rounded">
                 <button
                   onClick={openEdit}
                   className="text-sm text-indigo-600 hover:text-indigo-700 border border-indigo-300 rounded px-3 py-1"
@@ -155,6 +149,13 @@ function IncidentDetail() {
                   </button>
                 )}
               </div>
+            </div>
+            
+            <div>
+              <h2 className="text-xl font-semibold">{incident.title}</h2>
+              <p className="text-start mt-2 py-4 text-gray-600">
+                {incident.description || 'No description provided.'}
+              </p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
