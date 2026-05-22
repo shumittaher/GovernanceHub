@@ -109,26 +109,26 @@ function Incidents() {
   }
 
   return (
-    <div className="flex justify-center bg-gray-50">
+    <div className="min-h-screen flex justify-center bg-slate-50">
       <div className="w-full max-w-4xl p-8 bg-white rounded shadow">
-        <h1 className="text-2xl font-semibold">Incidents</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">Incidents</h1>
 
         {!loading && !error && (
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="rounded border p-4 bg-slate-50">
-              <p className="text-sm text-gray-500">Total</p>
-              <p className="text-2xl font-semibold mt-1">{total}</p>
+            <div className="rounded border border-slate-200 p-4 bg-slate-50">
+              <p className="text-sm text-slate-600">Total</p>
+              <p className="text-2xl font-semibold mt-1 text-slate-900">{total}</p>
             </div>
-            <div className="rounded border p-4 bg-blue-50">
-              <p className="text-sm text-gray-500">Open</p>
+            <div className="rounded border border-slate-200 p-4 bg-blue-50">
+              <p className="text-sm text-slate-600">Open</p>
               <p className="text-2xl font-semibold mt-1 text-blue-700">{open}</p>
             </div>
-            <div className="rounded border p-4 bg-red-50">
-              <p className="text-sm text-gray-500">Critical</p>
+            <div className="rounded border border-slate-200 p-4 bg-red-50">
+              <p className="text-sm text-slate-600">Critical</p>
               <p className="text-2xl font-semibold mt-1 text-red-700">{critical}</p>
             </div>
-            <div className="rounded border p-4 bg-green-50">
-              <p className="text-sm text-gray-500">Resolved</p>
+            <div className="rounded border border-slate-200 p-4 bg-green-50">
+              <p className="text-sm text-slate-600">Resolved</p>
               <p className="text-2xl font-semibold mt-1 text-green-700">{resolved}</p>
             </div>
           </div>
@@ -137,7 +137,7 @@ function Incidents() {
         <div className="mt-4">
           <button
             onClick={() => setShowForm(v => !v)}
-            className="px-4 py-2 text-sm border rounded hover:bg-gray-50"
+            className="px-4 py-2 text-sm border border-slate-300 rounded hover:bg-slate-50 text-slate-700"
           >
             {showForm ? 'Hide Form' : 'New Incident'}
           </button>
@@ -150,13 +150,13 @@ function Incidents() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="px-3 py-2 border rounded w-full"
+              className="px-3 py-2 border border-slate-300 rounded w-full text-slate-900"
             />
             <input
               placeholder="Assigned to"
               value={assignedTo}
               onChange={(e) => setAssignedTo(e.target.value)}
-              className="px-3 py-2 border rounded w-full"
+              className="px-3 py-2 border border-slate-300 rounded w-full text-slate-900"
             />
           </div>
 
@@ -165,18 +165,18 @@ function Incidents() {
               placeholder="Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border border-slate-300 rounded text-slate-900"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <select value={severity} onChange={(e) => setSeverity(e.target.value as any)} className="px-3 py-2 border rounded">
+            <select value={severity} onChange={(e) => setSeverity(e.target.value as any)} className="px-3 py-2 border border-slate-300 rounded text-slate-900">
               <option>Low</option>
               <option>Medium</option>
               <option>High</option>
               <option>Critical</option>
             </select>
-            <select value={status} onChange={(e) => setStatus(e.target.value as any)} className="px-3 py-2 border rounded">
+            <select value={status} onChange={(e) => setStatus(e.target.value as any)} className="px-3 py-2 border border-slate-300 rounded text-slate-900">
               <option>Open</option>
               <option>In Progress</option>
               <option>Resolved</option>
@@ -195,14 +195,14 @@ function Incidents() {
           </div>
         </form>}
 
-        {loading && <p className="mt-4 text-sm text-gray-600">Loading incidents...</p>}
+        {loading && <p className="mt-4 text-sm text-slate-600">Loading incidents...</p>}
 
         {error && (
           <div className="mt-4 text-sm text-red-700 bg-red-100 p-3 rounded">{error}</div>
         )}
 
         {!loading && !error && incidents.length === 0 && (
-          <p className="mt-4 text-sm text-gray-600">No incidents found.</p>
+          <p className="mt-4 text-sm text-slate-600">No incidents found.</p>
         )}
 
         {!loading && !error && incidents.length > 0 && (
@@ -211,7 +211,7 @@ function Incidents() {
               <select
                 value={filterSeverity}
                 onChange={e => setFilterSeverity(e.target.value)}
-                className="px-3 py-2 border rounded text-sm"
+                className="px-3 py-2 border border-slate-300 rounded text-sm text-slate-700"
               >
                 {['All', 'Low', 'Medium', 'High', 'Critical'].map(v => (
                   <option key={v}>{v}</option>
@@ -220,7 +220,7 @@ function Incidents() {
               <select
                 value={filterStatus}
                 onChange={e => setFilterStatus(e.target.value)}
-                className="px-3 py-2 border rounded text-sm"
+                className="px-3 py-2 border border-slate-300 rounded text-sm text-slate-700"
               >
                 {['All', 'Open', 'In Progress', 'Resolved', 'Closed'].map(v => (
                   <option key={v}>{v}</option>
@@ -229,7 +229,7 @@ function Incidents() {
             </div>
 
             {sortedIncidents.length === 0 ? (
-              <p className="text-sm text-gray-600">No incidents match the current filters.</p>
+              <p className="text-sm text-slate-600">No incidents match the current filters.</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full text-left border-collapse">
@@ -239,7 +239,7 @@ function Incidents() {
                         <th
                           key={field}
                           onClick={() => handleSort(field)}
-                          className="border-b px-4 py-2 cursor-pointer select-none hover:bg-slate-50"
+                          className="border-b border-slate-200 px-4 py-2 cursor-pointer select-none hover:bg-slate-50 text-slate-700 font-medium"
                         >
                           {(['Title', 'Severity', 'Status', 'Assigned To', 'Created At', 'Updated At'] as const)[i]}{sortIndicator(field)}
                         </th>
@@ -249,16 +249,16 @@ function Incidents() {
                   <tbody>
                     {sortedIncidents.map((incident) => (
                       <tr key={incident.id} className="odd:bg-slate-50">
-                        <td className="border-b px-4 py-3">
+                        <td className="border-b border-slate-200 px-4 py-3 text-slate-900">
                           <Link to={`/incidents/${incident.id}`} className="text-indigo-600 hover:text-indigo-700">
                             {incident.title}
                           </Link>
                         </td>
-                        <td className="border-b px-4 py-3">{incident.severity}</td>
-                        <td className="border-b px-4 py-3">{incident.status}</td>
-                        <td className="border-b px-4 py-3">{incident.assigned_to}</td>
-                        <td className="border-b px-4 py-3" title={new Date(incident.created_at).toLocaleString()}>{new Date(incident.created_at).toLocaleDateString()}</td>
-                        <td className="border-b px-4 py-3" title={new Date(incident.updated_at).toLocaleString()}>{new Date(incident.updated_at).toLocaleDateString()}</td>
+                        <td className="border-b border-slate-200 px-4 py-3 text-slate-700">{incident.severity}</td>
+                        <td className="border-b border-slate-200 px-4 py-3 text-slate-700">{incident.status}</td>
+                        <td className="border-b border-slate-200 px-4 py-3 text-slate-700">{incident.assigned_to}</td>
+                        <td className="border-b border-slate-200 px-4 py-3 text-slate-700" title={new Date(incident.created_at).toLocaleString()}>{new Date(incident.created_at).toLocaleDateString()}</td>
+                        <td className="border-b border-slate-200 px-4 py-3 text-slate-700" title={new Date(incident.updated_at).toLocaleString()}>{new Date(incident.updated_at).toLocaleDateString()}</td>
                       </tr>
                     ))}
                   </tbody>

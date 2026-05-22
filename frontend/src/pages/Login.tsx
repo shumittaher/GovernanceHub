@@ -31,11 +31,11 @@ function Login({ onLogin }: LoginProps) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-50">
-      <h1 className="text-2xl font-semibold m-8 text-center">GovernanceHub</h1>
+    <div className="flex flex-col items-center justify-center bg-slate-50">
+      <h1 className="text-2xl font-semibold m-8 text-center text-slate-900">GovernanceHub</h1>
 
       <div className="w-full max-w-md p-8 bg-white rounded shadow">
-        <h1 className="text-2xl font-semibold mb-6 text-center">Sign in</h1>
+        <h1 className="text-2xl font-semibold mb-6 text-center text-slate-900">Sign in</h1>
 
         {error && (
           <div className="mb-4 text-sm text-red-700 bg-red-100 p-2 rounded">{error}</div>
@@ -43,24 +43,24 @@ function Login({ onLogin }: LoginProps) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm font-medium mb-1 text-slate-700">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border border-slate-300 rounded text-slate-900"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label className="block text-sm font-medium mb-1 text-slate-700">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border border-slate-300 rounded text-slate-900"
             />
           </div>
 

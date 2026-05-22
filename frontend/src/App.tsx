@@ -23,12 +23,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-slate-50">
         <div className="max-w-4xl mx-auto p-4">
           {user && (
             <div className="mb-4 rounded bg-white p-4 shadow-sm">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700">
+                <div className="flex flex-wrap items-center gap-4 text-sm text-slate-700">
                   {role === 'superadmin' && (
                     <Link to="/superadmin/admins" className="text-indigo-600 hover:text-indigo-700">
                       Admins
@@ -51,7 +51,7 @@ function App() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700">
+                <div className="flex flex-wrap items-center gap-4 text-sm text-slate-700">
                   <span>Signed in as <strong>{user.name || user.email}</strong>{user.role ? ` (${user.role})` : ''}</span>
                   <button onClick={handleLogout} className="text-indigo-600 hover:underline">
                     Sign out

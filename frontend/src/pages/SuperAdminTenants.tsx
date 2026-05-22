@@ -57,11 +57,11 @@ function SuperAdminTenants() {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">Manage Tenants</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-slate-900">Manage Tenants</h1>
 
       {/* Create form */}
       <div className="bg-white rounded shadow p-6 mb-6">
-        <h2 className="text-lg font-medium mb-4">Create Tenant</h2>
+        <h2 className="text-lg font-medium mb-4 text-slate-800">Create Tenant</h2>
 
         {formError && (
           <div className="mb-4 text-sm text-red-700 bg-red-100 p-3 rounded">{formError}</div>
@@ -69,13 +69,13 @@ function SuperAdminTenants() {
 
         <form onSubmit={handleCreate} className="flex gap-3 items-end">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <label className="block text-sm font-medium text-slate-700">Name</label>
             <input
               type="text"
               required
               value={name}
               onChange={e => setName(e.target.value)}
-              className="mt-1 block w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="mt-1 block w-full border border-slate-300 rounded px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
           </div>
           <button
@@ -90,7 +90,7 @@ function SuperAdminTenants() {
 
       {/* Tenant list */}
       <div className="bg-white rounded shadow p-6">
-        <h2 className="text-lg font-medium mb-3">Tenants</h2>
+        <h2 className="text-lg font-medium mb-3 text-slate-800">Tenants</h2>
 
         <div className="mb-4 text-sm text-amber-700 bg-amber-50 border border-amber-200 p-3 rounded">
           Deleting a tenant permanently removes all of its users and incidents.
@@ -100,21 +100,21 @@ function SuperAdminTenants() {
           <div className="mb-4 text-sm text-red-700 bg-red-100 p-3 rounded">{deleteError}</div>
         )}
 
-        {loading && <p className="text-sm text-gray-600">Loading...</p>}
+        {loading && <p className="text-sm text-slate-600">Loading...</p>}
 
         {loadError && (
           <div className="text-sm text-red-700 bg-red-100 p-3 rounded">{loadError}</div>
         )}
 
         {!loading && !loadError && tenants.length === 0 && (
-          <p className="text-sm text-gray-600">No tenants found.</p>
+          <p className="text-sm text-slate-600">No tenants found.</p>
         )}
 
         {!loading && !loadError && tenants.length > 0 && (
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
               <thead>
-                <tr className="border-b text-gray-500">
+                <tr className="border-b border-slate-200 text-slate-600">
                   <th className="pb-2 pr-4 font-medium">ID</th>
                   <th className="pb-2 pr-4 font-medium">Name</th>
                   <th className="pb-2 pr-4 font-medium">Created</th>
@@ -123,10 +123,10 @@ function SuperAdminTenants() {
               </thead>
               <tbody>
                 {tenants.map(tenant => (
-                  <tr key={tenant.id} className="border-b last:border-0">
-                    <td className="py-2 pr-4 text-gray-500">{tenant.id}</td>
-                    <td className="py-2 pr-4">{tenant.name}</td>
-                    <td className="py-2 pr-4">{new Date(tenant.created_at).toLocaleDateString()}</td>
+                  <tr key={tenant.id} className="border-b border-slate-200 last:border-0">
+                    <td className="py-2 pr-4 text-slate-600">{tenant.id}</td>
+                    <td className="py-2 pr-4 text-slate-900">{tenant.name}</td>
+                    <td className="py-2 pr-4 text-slate-700">{new Date(tenant.created_at).toLocaleDateString()}</td>
                     <td className="py-2">
                       <button
                         onClick={() => handleDelete(tenant.id)}
