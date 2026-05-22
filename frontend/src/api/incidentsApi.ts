@@ -7,6 +7,8 @@ export interface Incident {
   severity: string
   status: string
   assigned_to?: string | null
+  created_at: string
+  updated_at: string
 }
 
 export async function fetchIncidents(): Promise<Incident[]> {

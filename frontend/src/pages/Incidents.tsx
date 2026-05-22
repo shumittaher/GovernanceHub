@@ -77,11 +77,18 @@ function Incidents() {
     .filter(i => filterSeverity === 'All' || i.severity === filterSeverity)
     .filter(i => filterStatus === 'All' || i.status === filterStatus)
 
+  const DATE_FIELDS = new Set(['created_at', 'updated_at'])
+
   const sortedIncidents = sortField === null
     ? filteredIncidents
     : filteredIncidents.slice().sort((a, b) => {
         const av = (a[sortField as keyof Incident] ?? '') as string
         const bv = (b[sortField as keyof Incident] ?? '') as string
+        if (DATE_FIELDS.has(sortField)) {
+          return sortDir === 'asc'
+            ? new Date(av).getTime() - new Date(bv).getTime()
+            : new Date(bv).getTime() - new Date(av).getTime()
+        }
         return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av)
       })
 
@@ -217,13 +224,13 @@ function Incidents() {
                 <table className="min-w-full text-left border-collapse">
                   <thead>
                     <tr>
-                      {(['title', 'severity', 'status', 'assigned_to'] as const).map((field, i) => (
+                      {(['title', 'severity', 'status', 'assigned_to', 'created_at', 'updated_at'] as const).map((field, i) => (
                         <th
                           key={field}
                           onClick={() => handleSort(field)}
                           className="border-b px-4 py-2 cursor-pointer select-none hover:bg-slate-50"
                         >
-                          {(['Title', 'Severity', 'Status', 'Assigned To'] as const)[i]}{sortIndicator(field)}
+                          {(['Title', 'Severity', 'Status', 'Assigned To', 'Created At', 'Updated At'] as const)[i]}{sortIndicator(field)}
                         </th>
                       ))}
                     </tr>
@@ -239,6 +246,8 @@ function Incidents() {
                         <td className="border-b px-4 py-3">{incident.severity}</td>
                         <td className="border-b px-4 py-3">{incident.status}</td>
                         <td className="border-b px-4 py-3">{incident.assigned_to}</td>
+                        <td className="border-b px-4 py-3" title={new Date(incident.created_at).toLocaleString()}>{new Date(incident.created_at).toLocaleDateString()}</td>
+                        <td className="border-b px-4 py-3" title={new Date(incident.updated_at).toLocaleString()}>{new Date(incident.updated_at).toLocaleDateString()}</td>
                       </tr>
                     ))}
                   </tbody>
