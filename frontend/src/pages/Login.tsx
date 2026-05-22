@@ -22,7 +22,7 @@ function Login({ onLogin }: LoginProps) {
     try {
       const user = await login(email, password)
       onLogin(user)
-      navigate('/incidents', { replace: true })
+      navigate(user.role === 'superadmin' ? '/superadmin/admins' : '/incidents', { replace: true })
     } catch (err: any) {
       setError(err?.message || 'Login failed')
     } finally {

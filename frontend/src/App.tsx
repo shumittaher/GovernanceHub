@@ -1,24 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom'
 import type { User } from './api/authApi'
 import Login from './pages/Login'
 import Incidents from './pages/Incidents'
 import IncidentDetail from './pages/IncidentDetail'
 import CreateUser from './pages/CreateUser'
+import SuperAdminAdmins from './pages/SuperAdminAdmins'
 
 function App() {
-  const [user, setUser] = useState<User | null>(null)
-
-  useEffect(() => {
-    const raw = localStorage.getItem('user')
-    if (raw) {
-      try {
-        setUser(JSON.parse(raw))
-      } catch {
-        setUser(null)
-      }
-    }
-  }, [])
+  const [user, setUser] = useState<User | null>(() => {
+    try {
+      const raw = localStorage.getItem('user')
+      return raw ? JSON.parse(raw) : null
+    } catch { return null }
+  })
 
   const handleLogout = () => {
     localStorage.removeItem('token')
@@ -28,6 +23,8 @@ function App() {
   }
 
   const isAuthenticated = Boolean(localStorage.getItem('token'))
+  const role = user?.role ?? null
+  const homeRoute = role === 'superadmin' ? '/superadmin/admins' : '/incidents'
 
   return (
     <BrowserRouter>
@@ -37,12 +34,21 @@ function App() {
             <div className="mb-4 rounded bg-white p-4 shadow-sm">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700">
-                  <Link to="/incidents" className="text-indigo-600 hover:text-indigo-700">
-                    Incidents
-                  </Link>
-                  <Link to="/users/new" className="text-indigo-600 hover:text-indigo-700">
-                    Create User
-                  </Link>
+                  {role === 'superadmin' && (
+                    <Link to="/superadmin/admins" className="text-indigo-600 hover:text-indigo-700">
+                      Manage Admins
+                    </Link>
+                  )}
+                  {role !== 'superadmin' && (
+                    <Link to="/incidents" className="text-indigo-600 hover:text-indigo-700">
+                      Incidents
+                    </Link>
+                  )}
+                  {role === 'admin' && (
+                    <Link to="/users/new" className="text-indigo-600 hover:text-indigo-700">
+                      Create User
+                    </Link>
+                  )}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700">
@@ -56,11 +62,28 @@ function App() {
           )}
 
           <Routes>
-            <Route path="/" element={<Navigate to={isAuthenticated ? '/incidents' : '/login'} replace />} />
-            <Route path="/login" element={isAuthenticated ? <Navigate to="/incidents" replace /> : <Login onLogin={setUser} />} />
-            <Route path="/incidents" element={isAuthenticated ? <Incidents /> : <Navigate to="/login" replace />} />
-            <Route path="/incidents/:id" element={isAuthenticated ? <IncidentDetail /> : <Navigate to="/login" replace />} />
-            <Route path="/users/new" element={isAuthenticated ? <CreateUser /> : <Navigate to="/login" replace />} />
+            <Route path="/" element={<Navigate to={isAuthenticated ? homeRoute : '/login'} replace />} />
+            <Route path="/login" element={isAuthenticated ? <Navigate to={homeRoute} replace /> : <Login onLogin={setUser} />} />
+            <Route path="/incidents" element={
+              !isAuthenticated ? <Navigate to="/login" replace />
+              : role === 'superadmin' ? <Navigate to="/superadmin/admins" replace />
+              : <Incidents />
+            } />
+            <Route path="/incidents/:id" element={
+              !isAuthenticated ? <Navigate to="/login" replace />
+              : role === 'superadmin' ? <Navigate to="/superadmin/admins" replace />
+              : <IncidentDetail />
+            } />
+            <Route path="/users/new" element={
+              !isAuthenticated ? <Navigate to="/login" replace />
+              : role !== 'admin' ? <Navigate to={homeRoute} replace />
+              : <CreateUser />
+            } />
+            <Route path="/superadmin/admins" element={
+              !isAuthenticated ? <Navigate to="/login" replace />
+              : role !== 'superadmin' ? <Navigate to="/incidents" replace />
+              : <SuperAdminAdmins />
+            } />
           </Routes>
         </div>
       </div>
