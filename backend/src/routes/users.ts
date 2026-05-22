@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { z } from "zod";
 import { authMiddleware } from "../middleware/auth";
+import { requireRole } from "../middleware/requireRole";
 import { createUser } from "../services/usersService";
 
 const router = Router();
@@ -13,7 +14,7 @@ const createUserSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", requireRole("admin"), async (req: Request, res: Response) => {
   try {
     const tenantId = req.user!.tenantId;
     const userData = createUserSchema.safeParse(req.body);
