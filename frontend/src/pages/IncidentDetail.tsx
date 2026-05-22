@@ -107,8 +107,8 @@ function IncidentDetail() {
   }
 
   return (
-    <div className="min-h-screen flex justify-center bg-gray-50">
-      <div className="w-full h-full max-w-3xl p-8 bg-white rounded shadow">
+    <div className="flex justify-center bg-gray-50">
+      <div className="w-full h-full max-w-4xl p-8 bg-white rounded shadow">
         <Link to="/incidents" className="text-indigo-600 hover:text-indigo-700 text-sm">
           &larr; Back to incidents
         </Link>

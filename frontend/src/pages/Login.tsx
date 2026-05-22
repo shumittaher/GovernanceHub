@@ -31,9 +31,11 @@ function Login({ onLogin }: LoginProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="flex flex-col items-center justify-center bg-gray-50">
+      <h1 className="text-2xl font-semibold m-8 text-center">GovernanceHub</h1>
+
       <div className="w-full max-w-md p-8 bg-white rounded shadow">
-        <h1 className="text-2xl font-semibold mb-6 text-center">Sign in to GovernanceHub</h1>
+        <h1 className="text-2xl font-semibold mb-6 text-center">Sign in</h1>
 
         {error && (
           <div className="mb-4 text-sm text-red-700 bg-red-100 p-2 rounded">{error}</div>
