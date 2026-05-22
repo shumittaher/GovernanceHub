@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom'
-import type { User } from './api/authApi'
+import { useAuth } from './hooks/useAuth'
 import Login from './pages/Login'
 import Incidents from './pages/Incidents'
 import IncidentDetail from './pages/IncidentDetail'
@@ -9,12 +9,9 @@ import SuperAdminAdmins from './pages/SuperAdminAdmins'
 import SuperAdminTenants from './pages/SuperAdminTenants'
 
 function App() {
-  const [user, setUser] = useState<User | null>(() => {
-    try {
-      const raw = localStorage.getItem('user')
-      return raw ? JSON.parse(raw) : null
-    } catch { return null }
-  })
+  const { user: initialUser, isAuthenticated } = useAuth()
+  const [user, setUser] = useState(initialUser)
+  const role = user?.role ?? null
 
   const handleLogout = () => {
     localStorage.removeItem('token')
@@ -22,9 +19,6 @@ function App() {
     setUser(null)
     window.location.href = '/login'
   }
-
-  const isAuthenticated = Boolean(localStorage.getItem('token'))
-  const role = user?.role ?? null
   const homeRoute = role === 'superadmin' ? '/superadmin/admins' : '/incidents'
 
   return (
