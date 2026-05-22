@@ -13,6 +13,7 @@ function Incidents() {
   const [assignedTo, setAssignedTo] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
+  const [showForm, setShowForm] = useState(false)
   const [filterSeverity, setFilterSeverity] = useState('All')
   const [filterStatus, setFilterStatus] = useState('All')
   const [sortField, setSortField] = useState<string | null>(null)
@@ -55,6 +56,7 @@ function Incidents() {
       setSeverity('Low')
       setStatus('Open')
       setAssignedTo('')
+      setShowForm(false)
 
       // refresh list
       setLoading(true)
@@ -132,7 +134,16 @@ function Incidents() {
           </div>
         )}
 
-        <form onSubmit={handleCreate} className="mt-4 space-y-3">
+        <div className="mt-4">
+          <button
+            onClick={() => setShowForm(v => !v)}
+            className="px-4 py-2 text-sm border rounded hover:bg-gray-50"
+          >
+            {showForm ? 'Hide Form' : 'New Incident'}
+          </button>
+        </div>
+
+        {showForm && <form onSubmit={handleCreate} className="mt-4 space-y-3">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <input
               placeholder="Title"
@@ -182,7 +193,7 @@ function Incidents() {
               {submitting ? 'Creating...' : 'Create Incident'}
             </button>
           </div>
-        </form>
+        </form>}
 
         {loading && <p className="mt-4 text-sm text-gray-600">Loading incidents...</p>}
 
