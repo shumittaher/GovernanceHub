@@ -64,10 +64,36 @@ function Incidents() {
     }
   }
 
+  const total = incidents.length
+  const open = incidents.filter(i => i.status === 'Open').length
+  const critical = incidents.filter(i => i.severity === 'Critical').length
+  const resolved = incidents.filter(i => i.status === 'Resolved').length
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-4xl p-8 bg-white rounded shadow">
         <h1 className="text-2xl font-semibold">Incidents</h1>
+
+        {!loading && !error && (
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="rounded border p-4 bg-slate-50">
+              <p className="text-sm text-gray-500">Total</p>
+              <p className="text-2xl font-semibold mt-1">{total}</p>
+            </div>
+            <div className="rounded border p-4 bg-blue-50">
+              <p className="text-sm text-gray-500">Open</p>
+              <p className="text-2xl font-semibold mt-1 text-blue-700">{open}</p>
+            </div>
+            <div className="rounded border p-4 bg-red-50">
+              <p className="text-sm text-gray-500">Critical</p>
+              <p className="text-2xl font-semibold mt-1 text-red-700">{critical}</p>
+            </div>
+            <div className="rounded border p-4 bg-green-50">
+              <p className="text-sm text-gray-500">Resolved</p>
+              <p className="text-2xl font-semibold mt-1 text-green-700">{resolved}</p>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleCreate} className="mt-4 space-y-3">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
