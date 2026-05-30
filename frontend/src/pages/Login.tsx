@@ -38,7 +38,7 @@ function Login({ onLogin }: LoginProps) {
         <h1 className="text-2xl font-semibold mb-6 text-center text-slate-900">Sign in</h1>
 
         {error && (
-          <div className="mb-4 text-sm text-red-700 bg-red-100 p-2 rounded">{error}</div>
+          <div data-testid="login-error" className="mb-4 text-sm text-red-700 bg-red-100 p-2 rounded">{error}</div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
