@@ -89,9 +89,10 @@ function SuperAdminAdmins() {
 
         <form onSubmit={handleCreate} className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-slate-700">Name</label>
+            <label htmlFor="admin-name" className="block text-sm font-medium text-slate-700">Name</label>
             <input
               type="text"
+              id="admin-name"
               required
               value={form.name}
               onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
@@ -100,9 +101,10 @@ function SuperAdminAdmins() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700">Email</label>
+            <label htmlFor="admin-email" className="block text-sm font-medium text-slate-700">Email</label>
             <input
               type="email"
+              id="admin-email"
               required
               value={form.email}
               onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
@@ -111,9 +113,10 @@ function SuperAdminAdmins() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700">Password</label>
+            <label htmlFor="admin-password" className="block text-sm font-medium text-slate-700">Password</label>
             <input
               type="password"
+              id="admin-password"
               required
               minLength={8}
               value={form.password}
@@ -123,9 +126,10 @@ function SuperAdminAdmins() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700">Tenant ID</label>
+            <label htmlFor="admin-tenant-id" className="block text-sm font-medium text-slate-700">Tenant ID</label>
             <input
               type="number"
+              id="admin-tenant-id"
               required
               min={1}
               value={form.tenant_id}
