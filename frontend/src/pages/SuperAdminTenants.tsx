@@ -69,9 +69,10 @@ function SuperAdminTenants() {
 
         <form onSubmit={handleCreate} className="flex gap-3 items-end">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-slate-700">Name</label>
+            <label htmlFor="tenant-name" className="block text-sm font-medium text-slate-700">Name</label>
             <input
               type="text"
+              id="tenant-name"
               required
               value={name}
               onChange={e => setName(e.target.value)}
@@ -123,7 +124,7 @@ function SuperAdminTenants() {
               </thead>
               <tbody>
                 {tenants.map(tenant => (
-                  <tr key={tenant.id} className="border-b border-slate-200 last:border-0">
+                  <tr data-tenant-id={tenant.id} key={tenant.id} className="border-b border-slate-200 last:border-0">
                     <td className="py-2 pr-4 text-slate-600">{tenant.id}</td>
                     <td className="py-2 pr-4 text-slate-900">{tenant.name}</td>
                     <td className="py-2 pr-4 text-slate-700">{new Date(tenant.created_at).toLocaleDateString()}</td>
