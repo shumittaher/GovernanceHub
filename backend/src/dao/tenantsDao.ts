@@ -21,6 +21,14 @@ export async function insertTenant(name: string): Promise<TenantRecord> {
   return result.rows[0];
 }
 
+export async function getTenantById(id: number): Promise<TenantRecord | null> {
+  const result = await pool.query(
+    `SELECT id, name, created_at FROM tenants WHERE id = $1`,
+    [id]
+  );
+  return result.rows[0] ?? null;
+}
+
 export async function deleteTenantById(id: number): Promise<boolean> {
   const result = await pool.query(
     `DELETE FROM tenants WHERE id = $1`,

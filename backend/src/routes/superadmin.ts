@@ -45,7 +45,13 @@ router.post("/admins", async (req: Request, res: Response) => {
     const admin = await createAdmin(tenant_id, name, email, password);
 
     res.status(201).json({ admin });
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.message === "Tenant not found") {
+      return res.status(404).json({
+        status: "error",
+        message: "Tenant not found",
+      });
+    }
     console.error("Failed to create admin:", error);
     res.status(500).json({
       status: "error",

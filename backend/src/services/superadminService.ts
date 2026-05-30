@@ -5,6 +5,7 @@ import {
   deleteAdminById,
   type AdminRecord,
 } from "../dao/superadminDao";
+import { getTenantById } from "../dao/tenantsDao";
 
 const BCRYPT_ROUNDS = 10;
 
@@ -18,6 +19,10 @@ export async function createAdmin(
   email: string,
   password: string
 ): Promise<AdminRecord> {
+  const tenant = await getTenantById(tenantId);
+  if (!tenant) {
+    throw new Error("Tenant not found");
+  }
   const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
   return insertAdmin(tenantId, name, email, passwordHash);
 }
